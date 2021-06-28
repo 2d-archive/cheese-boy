@@ -1,12 +1,15 @@
 package lol.dimensional.cheese;
 
+import lol.dimensional.cheese.commands.Start;
+import lol.dimensional.cheese.commands.Stop;
 import lol.dimensional.cheese.listeners.PlayerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 
-public final class Cheese extends JavaPlugin implements Listener {
+public final class Cheese extends JavaPlugin {
 
     private static final String DEFAULT_CHEESE_BOY = "873c0367-7ba9-4a9a-96ae-fa312ae756cb";
     private static Cheese INSTANCE;
@@ -22,16 +25,19 @@ public final class Cheese extends JavaPlugin implements Listener {
     @Nullable
     private Integer taskId;
 
-    @Nullable
-    private UUID cheeseBoy;
+    private UUID cheeseBoyId;
 
     Cheese() {
         Cheese.INSTANCE = this;
     }
 
+    public UUID getCheeseBoyId() {
+        return this.cheeseBoyId;
+    }
+
     @Nullable
-    public UUID getCheeseBoy() {
-        return this.cheeseBoy;
+    public Player getCheeseBoy() {
+        return this.getServer().getPlayer(getCheeseBoyId());
     }
 
     @Override
@@ -39,12 +45,19 @@ public final class Cheese extends JavaPlugin implements Listener {
         this.getLogger().info("Lol fucking cheese boy");
 
         /* get and set the cheese boy value */
-        String rawCheeseBoy = getConfig().getString("cheese-boy", Cheese.DEFAULT_CHEESE_BOY);
-        this.cheeseBoy = UUID.fromString(rawCheeseBoy);
+        var rawCheeseBoy = this
+                .getConfig()
+                .getString("cheese-boy", Cheese.DEFAULT_CHEESE_BOY);
+
+        this.cheeseBoyId = UUID.fromString(rawCheeseBoy);
 
         /* events */
         PluginManager pluginManager = this.getServer().getPluginManager();
         pluginManager.registerEvents(new PlayerListener(), this);
+
+        /* commands */
+        this.useExecutor("stop", new Stop());
+        this.useExecutor("start", new Start());
 
         /* detect if the cheese boy is in this server. */
         this.detectCheeseBoy();
@@ -61,7 +74,7 @@ public final class Cheese extends JavaPlugin implements Listener {
     public void detectCheeseBoy() {
         Player player = this
                 .getServer()
-                .getPlayer(Objects.requireNonNull(cheeseBoy));
+                .getPlayer(Objects.requireNonNull(cheeseBoyId));
 
         if (player != null) {
             this.startTheCheese(player);
@@ -73,7 +86,7 @@ public final class Cheese extends JavaPlugin implements Listener {
      *
      * @param player The player to continuously send the cheese to.
      */
-    public void startTheCheese(Player player) {
+    public boolean startTheCheese(Player player) {
         if (this.taskId == null) {
             this
                     .getLogger()
@@ -82,15 +95,29 @@ public final class Cheese extends JavaPlugin implements Listener {
             this.taskId = Bukkit
                     .getScheduler()
                     .scheduleSyncRepeatingTask(this, () -> sendCheeseTitle(player), 100L, 100L);
+
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Stops sending the cheese title.
      */
-    public void stopTheCheese() {
+    public boolean stopTheCheese() {
         if (this.taskId != null) {
             Bukkit.getScheduler().cancelTask(this.taskId);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void useExecutor(String command, CommandExecutor executor) {
+        var cmd = this.getCommand(command);
+        if (cmd != null) {
+            cmd.setExecutor(executor);
         }
     }
 
@@ -127,6 +154,16 @@ public final class Cheese extends JavaPlugin implements Listener {
      * @return true, if the player is the cheese boy.
      */
     public static boolean isCheeseBoy(Player player) {
-        return player.getUniqueId() != Cheese.getInstance().getCheeseBoy();
+        return player.getUniqueId() != Cheese.getInstance().getCheeseBoyId();
+    }
+
+    /**
+     * Replaces the & character to add color.
+     *
+     * @param str String to add color to.
+     * @return The translated string.
+     */
+    public static String formatColors(String str) {
+        return ChatColor.translateAlternateColorCodes('&', str);
     }
 }
