@@ -1,0 +1,8 @@
+name: Cheese
+version: 1.0.0
+main: lol.dimensional.cheese.Cheese
+api-version: 1.16
+prefix: cheese-boi
+authors: [ melike2d ]
+description: Whenever gavin joins a server, it'll call him a cheese boy
+website: dimensional.fun
