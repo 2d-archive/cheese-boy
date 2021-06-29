@@ -1,8 +1,23 @@
 name: Cheese
 version: 1.0.0
 main: lol.dimensional.cheese.Cheese
-api-version: 1.16
+api-version: 1.17
 prefix: cheese-boi
 authors: [ melike2d ]
-description: Whenever gavin joins a server, it'll call him a cheese boy
+description: Whenever someone joins a server, it'll call him a cheese boy
 website: dimensional.fun
+commands:
+  start:
+    description: Starts sending the cheese boy title
+    permission: cheese.start
+    aliases: [ go ]
+  stop:
+    description: Stops sending the cheese title
+    permission: cheese.stop
+permissions:
+  cheese.start:
+    description: Able to start the cheese title.
+    default: op
+  cheese.stop:
+    description: Able to stop the cheese title
+    default: op
