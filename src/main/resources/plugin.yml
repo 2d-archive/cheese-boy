@@ -6,3 +6,18 @@ prefix: cheese-boi
 authors: [ melike2d ]
 description: Whenever gavin joins a server, it'll call him a cheese boy
 website: dimensional.fun
+commands:
+  start:
+    description: Starts sending the cheese boy title
+    permission: cheese.start
+    aliases: [ go ]
+  stop:
+    description: Stops sending the cheese title
+    permission: cheese.stop
+permissions:
+  cheese.start:
+    description: Able to start the cheese title.
+    default: op
+  cheese.stop:
+    description: Able to stop the cheese title
+    default: op
