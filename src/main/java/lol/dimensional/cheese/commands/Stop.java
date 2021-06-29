@@ -14,7 +14,7 @@ public class Stop implements CommandExecutor {
             return false;
         }
 
-        var stopped = Cheese.getInstance().stopTheCheese();
+        boolean stopped = Cheese.getInstance().stopTheCheese();
         sender.sendMessage(stopped ? "Stopped sending the cheese" : "I did nothing lol");
 
         return true;

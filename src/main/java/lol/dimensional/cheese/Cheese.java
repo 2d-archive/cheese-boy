@@ -9,6 +9,7 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,7 +46,7 @@ public final class Cheese extends JavaPlugin {
         this.getLogger().info("Lol fucking cheese boy");
 
         /* get and set the cheese boy value */
-        var rawCheeseBoy = this
+        String rawCheeseBoy = this
                 .getConfig()
                 .getString("cheese-boy", Cheese.DEFAULT_CHEESE_BOY);
 
@@ -90,7 +91,7 @@ public final class Cheese extends JavaPlugin {
         if (this.taskId == null) {
             this
                     .getLogger()
-                    .info("Starting the cheese for %s".formatted(player.getName()));
+                    .info("Starting the cheese for " + player.getName());
 
             this.taskId = Bukkit
                     .getScheduler()
@@ -115,7 +116,7 @@ public final class Cheese extends JavaPlugin {
     }
 
     private void useExecutor(String command, CommandExecutor executor) {
-        var cmd = this.getCommand(command);
+        PluginCommand cmd = this.getCommand(command);
         if (cmd != null) {
             cmd.setExecutor(executor);
         }
@@ -154,7 +155,9 @@ public final class Cheese extends JavaPlugin {
      * @return true, if the player is the cheese boy.
      */
     public static boolean isCheeseBoy(Player player) {
-        return player.getUniqueId() != Cheese.getInstance().getCheeseBoyId();
+        return player.getUniqueId() != Cheese
+                .getInstance()
+                .getCheeseBoyId();
     }
 
     /**

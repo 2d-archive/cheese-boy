@@ -26,7 +26,7 @@ public class Start implements CommandExecutor {
             return false;
         }
 
-        var started = Cheese
+        boolean started = Cheese
                 .getInstance()
                 .startTheCheese(player);
 
