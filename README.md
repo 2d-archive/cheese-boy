@@ -7,7 +7,7 @@ Simple 1.16.5 Paper Plugin that sends a cheese title to the specified player.
 ## Requirements
 
 - 1.16.5 Paper Server
-- Java 16
+- At-least Java 8
 - Someone to call "Cheese Boy"
 
 ---
