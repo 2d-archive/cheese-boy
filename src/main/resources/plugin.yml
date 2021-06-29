@@ -4,7 +4,7 @@ main: lol.dimensional.cheese.Cheese
 api-version: 1.16
 prefix: cheese-boi
 authors: [ melike2d ]
-description: Whenever gavin joins a server, it'll call him a cheese boy
+description: Whenever the specified player joins a server, it'll call them a cheese boy
 website: dimensional.fun
 commands:
   start:
